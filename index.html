@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="referrer" content="never">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>15000个妹妹</title>
+<script src="jquery.min.js"></script>
+<script src="images-grid.js"></script>
+<link rel="stylesheet" href="images-grid.css" />
+</head>
+<body>
+<h1 id="title" style="color:#FF69B4"></h1>
+<div style="text-align:center;padding-bottom:1.5em;">
+<!--<select>
+<option value="0" selected="selected">Select Category</option>
+<option value="2">ROSI</option>
+<option value="3">XIUREN</option>
+<option value="4">COSPLAY</option>
+<option value="5">SEXY</option>
+<option value="6">Web Clebrity</option>
+<option value="163">CHINESE</option>
+<option value="166">UGIRLS</option>
+</select>-->
+<button id="refresh" style="width:200px;height:60px" autofocus="autofocus">下一个妹子</button>
+</div>
+<div id="gallery"></div>
+<script>
+function load(cat) {
+    datas = new Array();
+    $('#title').text("图集加载中...");
+    url = "/random.php";
+    if(cat){
+        url=url+"?cat="+cat;
+    }
+    $.get(url,
+    function(data, status) {
+        
+        if (status != 'success') {
+            alert("图集加载失败，请刷新页面.");
+        } else {
+            for (var i = 0; i < data.imgs.length; i++) {
+                datas[i] = {
+                    src: data.imgs[i],
+                    title: data.title,
+                    alt: data.title
+                };
+            }
+            $('#gallery').imagesGrid({
+                images: datas,
+                align: true
+            });
+            if(data.title){
+                $('#title').text(data.title);
+            }else{
+                $('#title').text("No Data.");
+            }
+        }
+    });
+}
+$(document).ready(function() {
+    load(0);
+    $("#refresh").click(function(){
+        cat = $("option:selected").val();
+        load(parseInt(cat));
+    });
+});
+   
+</script>
+
+</body>
+</html>
